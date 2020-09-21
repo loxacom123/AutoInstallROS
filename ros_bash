@@ -1,0 +1,27 @@
+# clear ROS env var for resolving warning #
+unset ros_version
+unset ROS_DISTRO
+
+# Set some variables #
+shell=`echo $SHELL | awk -F '/' '{print $NF}'`
+ros1_distro="melodic"
+ros1_ws="ros_ws"
+
+
+
+source /opt/ros/$ros1_distro/setup.$shell
+if [ -f "/home/${USER}/$ros1_ws/devel/setup.$shell" ]; then
+    source /home/${USER}/$ros1_ws/devel/setup.$shell
+fi
+
+my_ip=$(hostname -I | awk '{print $1}')
+my_hostname=$(hostname| awk '{print $1}')
+
+if [ -z $my_ip ]; then
+    my_ip="127.0.0.1"
+fi
+
+export ROS_IP=$my_ip
+export ROS_HOSTNAME=$my_hostname
+
+export ROS_MASTER_URI=http://$ROS_HOSTNAME:11311
